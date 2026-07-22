@@ -1,20 +1,13 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import './config/database.js';
+import { createApp } from './app.js';
 
-dotenv.config();
-
-const app = express();
+const app = createApp();
 const PORT = Number(process.env.PORT) || 8000;
-
-app.use(cors());
-app.use(express.json());
-
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'octofit-tracker-backend' });
-});
+const codespaceName = process.env.CODESPACE_NAME;
+const baseUrl = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev`
+  : `http://localhost:${PORT}`;
 
 app.listen(PORT, () => {
   console.log(`Backend listening on port ${PORT}`);
+  console.log(`API base URL: ${baseUrl}`);
 });
